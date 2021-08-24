@@ -10,4 +10,4 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-CMD ["prometheus/prometheus", "--config.file=prometheus/prometheus.yml", "--log.level=debug"]
+CMD ["prometheus/prometheus", "--config.file=prometheus/prometheus.yml"]
