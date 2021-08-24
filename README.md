@@ -1,5 +1,5 @@
 # Docker Apache Flink
 
 ```diff
-- PoC for Grafana Dashboard 
+- PoC of Grafana Dashboard for Apache Flink (Job Manager & Task Manager)
 ```
