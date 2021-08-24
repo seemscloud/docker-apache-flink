@@ -17,8 +17,6 @@ services:
         jobmanager.memory.jvm-overhead.max: 1024mb
         metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
         metrics.reporter.prom.port: 9260
-    ports:
-      - "8081:8081"
   flink-tm:
     hostname: "flink-tm"
     build:
@@ -52,7 +50,7 @@ services:
       replicas: 5
     environment:
       FLINK_JM_ADDRESS: "flink-jm"
-      FAKE_JOB_PACK_COUNT: 2 # X * 3 * replicas
+      FAKE_JOB_PACK_COUNT: 2
     depends_on:
       - flink-jm
   prometheus:
@@ -60,10 +58,11 @@ services:
     container_name: prometheus
     build:
       context: prometheus
-    ports:
-      - "9090:9090"
     volumes:
       - ${PWD}/prometheus/files/prometheus.yml:/app/prometheus/prometheus.yml
+    depends_on:
+      - flink-jm
+      - flink-tm
   grafana:
     container_name: grafana
     hostname: grafana
@@ -75,3 +74,5 @@ services:
       - ${PWD}/grafana/files/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
       - ${PWD}/grafana/files/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
       - ${PWD}/grafana/files/flink.json:/var/lib/grafana/dashboards/flink.json:ro
+    depends_on:
+      - prometheus
